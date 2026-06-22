@@ -10,7 +10,7 @@ from database import engine, Base, get_db
 import models
 import schemas
 from services.generation_service import GenerationService
-from services.storage_service import download_and_save_image
+from services.storage_service import save_image_bytes
 
 load_dotenv()
 
@@ -35,26 +35,16 @@ def health_check():
     return {"status": "ok"}
 
 @app.post("/generate-image", response_model=schemas.ImageRecordResponse)
-async def generate_image(request: schemas.ImageRecordCreate, db: Session = Depends(get_db)):
+async def generate_image_endpoint(request: schemas.ImageRecordCreate, db: Session = Depends(get_db)):
     service = GenerationService()
-    result = service.generate_content(request.prompt)
     
-    if result["status"] == "error":
-        raise HTTPException(status_code=503, detail=result["message"])
-        
     try:
-        ai_data = result["data"]
-        if "images" in ai_data:
-            image_url = ai_data["images"][0]["url"]
-        elif "data" in ai_data:
-            image_url = ai_data["data"][0]["url"]
-        else:
-            raise ValueError("Unknown response format from AI")
+        image_bytes = await service.generate_content(request.prompt)
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to parse AI response: {e}")
+        raise HTTPException(status_code=503, detail=str(e))
         
     try:
-        local_path = await download_and_save_image(image_url)
+        local_path = await save_image_bytes(image_bytes)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to save image: {e}")
         

@@ -27,11 +27,11 @@ def test_health_check():
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
-@patch("main.download_and_save_image", new_callable=AsyncMock)
-@patch("main.GenerationService.generate_content")
-def test_generate_image_success(mock_generate, mock_download):
-    mock_generate.return_value = {"status": "success", "data": {"images": [{"url": "http://fal.com/img.png"}]}}
-    mock_download.return_value = "uploads/test.png"
+@patch("main.save_image_bytes", new_callable=AsyncMock)
+@patch("main.GenerationService.generate_content", new_callable=AsyncMock)
+def test_generate_image_success(mock_generate, mock_save):
+    mock_generate.return_value = b"fake_bytes"
+    mock_save.return_value = "uploads/test.png"
 
     response = client.post("/generate-image", json={"prompt": "a cute cat", "file_path": ""})
     assert response.status_code == 200
