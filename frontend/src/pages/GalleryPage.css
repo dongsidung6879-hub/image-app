@@ -1,0 +1,33 @@
+.gallery-page {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+  width: 100%;
+}
+
+.gallery-header {
+  text-align: center;
+}
+
+.gallery-title {
+  font-size: 3rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.gallery-subtitle {
+  color: var(--text-secondary);
+  font-size: 1.125rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2rem;
+  width: 100%;
+}
+
+.error-state {
+  padding: 2rem;
+  text-align: center;
+}
