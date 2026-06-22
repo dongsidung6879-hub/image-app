@@ -1,6 +1,6 @@
 import pytest
 from unittest.mock import patch, MagicMock
-from services.storage_service import download_and_save_image
+from services.storage_service import download_and_save_image, save_image_bytes
 import os
 from pathlib import Path
 
@@ -26,6 +26,25 @@ async def test_download_and_save_image(mock_get):
     with open(file_path, "rb") as f:
         content = f.read()
     assert content == b"fake_image_data"
+    
+    # Clean up
+    os.remove(file_path)
+
+@pytest.mark.asyncio
+async def test_save_image_bytes():
+    result = await save_image_bytes(b"raw_binary_data")
+    
+    assert result.startswith("uploads/")
+    assert result.endswith(".png")
+    
+    # Verify file was created
+    file_path = Path(result)
+    assert file_path.exists()
+    
+    # Verify content
+    with open(file_path, "rb") as f:
+        content = f.read()
+    assert content == b"raw_binary_data"
     
     # Clean up
     os.remove(file_path)

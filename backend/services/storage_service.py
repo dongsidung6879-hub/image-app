@@ -22,3 +22,14 @@ async def download_and_save_image(url: str) -> str:
             await out_file.write(response.content)
             
     return f"uploads/{filename}"
+
+async def save_image_bytes(data: bytes) -> str:
+    """Save raw image bytes to the local uploads directory.
+    Returns the relative file path for the API."""
+    filename = f"{uuid.uuid4()}.png"
+    file_path = UPLOAD_DIR / filename
+    
+    async with aiofiles.open(file_path, 'wb') as out_file:
+        await out_file.write(data)
+        
+    return f"uploads/{filename}"
