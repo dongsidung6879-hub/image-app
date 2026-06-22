@@ -6,3 +6,5 @@ httpx
 pytest
 pytest-asyncio
 tenacity
+sqlalchemy
+aiofiles
