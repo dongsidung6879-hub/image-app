@@ -19,9 +19,13 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="AI Architecture API")
 
+# Dynamic CORS — supports comma-separated origins
+_raw_origins = os.getenv("FRONTEND_URL", "http://localhost:5173")
+allowed_origins = [o.strip() for o in _raw_origins.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -7,9 +7,8 @@ interface ImageCardProps {
 }
 
 export default function ImageCard({ imageUrl, prompt }: ImageCardProps) {
-  const backendUrl = "http://127.0.0.1:8000/"; // In production use .env
-  // If imageUrl doesn't start with http, prepend backend URL
-  const fullUrl = imageUrl.startsWith("http") ? imageUrl : backendUrl + imageUrl;
+  const backendUrl = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+  const fullUrl = imageUrl.startsWith('http') ? imageUrl : `${backendUrl}/${imageUrl}`;
 
   const handleDownload = () => {
     const link = document.createElement('a');
