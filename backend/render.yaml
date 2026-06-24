@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: image-app-backend
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT
+    envVars:
+      - key: HF_API_KEY
+        sync: false
+      - key: DATABASE_URL
+        value: sqlite:///./image_app.db
+      - key: FRONTEND_URL
+        sync: false
