@@ -15,7 +15,7 @@ export default function GalleryPage() {
       try {
         const data = await getImages();
         setImages(data);
-      } catch (err) {
+      } catch {
         setError('Failed to load gallery. Make sure backend is running.');
       } finally {
         setIsLoading(false);

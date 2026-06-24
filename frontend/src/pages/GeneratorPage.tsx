@@ -23,8 +23,10 @@ export default function GeneratorPage() {
     try {
       const data = await generateImage(prompt);
       setResult(data);
-    } catch (err: any) {
-      setError(err.response?.data?.detail || 'Failed to generate image. Please try again.');
+    } catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const errorMsg = (err as any).response?.data?.detail || 'Failed to generate image. Please try again.';
+      setError(errorMsg);
     } finally {
       setIsLoading(false);
     }
